@@ -18,10 +18,29 @@ public class BookingBook {
     /**
      * Issue 4.
      */
+     
     public Booking update(int id, Booking replacement) {
-        throw new UnsupportedOperationException(
-                "Issue 4: BookingBook.update() is not implemented yet");
+        if (replacement == null) {
+            throw new IllegalArgumentException("replacement must not be null");
     }
+    
+    int index = indexOfId(id);
+
+    Booking updated = new Booking(
+        id,
+        replacement.getUserId(),
+        replacement.getRoomId(),
+        replacement.getStart(),
+        replacement.getEnd(),
+        replacement.getAttendees(),
+        replacement.getPurpose(),
+        replacement.getStatus()
+    );
+
+    bookings.set(index, updated);
+    return updated;
+    }
+
 
     /**
      * Issue 4.
@@ -30,4 +49,15 @@ public class BookingBook {
         throw new UnsupportedOperationException(
                 "Issue 4: BookingBook.cancel() is not implemented yet");
     }
+    
+    private int indexOfId(int id) {
+        for (int i = 0; i < bookings.size(); i++) {
+            if (bookings.get(i).getId() == id) {
+                return i;
+        }
+    }
+
+    throw new IllegalArgumentException("No booking with id " + id);
+    }
+
 }
