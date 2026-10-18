@@ -25,9 +25,14 @@ public class BookingBook {
 
     /**
      * Issue 4.
+     * Marks the booking with the given id as CANCELLED. Cancelling an already cancelled booking is allowed and leaves it cancelled.
+     *
+     * @throws IllegalArgumentException if no booking with the given id exists
      */
     public Booking cancel(int id) {
-        throw new UnsupportedOperationException(
-                "Issue 4: BookingBook.cancel() is not implemented yet");
+        int index = indexOfId(id);
+        Booking cancelled = bookings.get(index).withStatus(BookingStatus.CANCELLED);
+        bookings.set(index, cancelled);
+        return cancelled;
     }
 }
