@@ -32,7 +32,7 @@ class BookingBookTest {
 
     private Booking replacementWithId(int id) {
         return new Booking(
-                id, "s1", "R205",
+                id, "s3", "R205",
                 LocalDateTime.parse("2026-10-20T16:00"),
                 LocalDateTime.parse("2026-10-20T17:00"),
                 4, "Project review", BookingStatus.CANCELLED);
@@ -44,7 +44,7 @@ class BookingBookTest {
     void updateReplacesAllEditableFields() {
         Booking result = book.update(5, replacementWithId(5));
 
-        assertEquals("s1", result.getUserId());
+        assertEquals("s3", result.getUserId());
         assertEquals("R205", result.getRoomId());
         assertEquals(LocalDateTime.parse("2026-10-20T16:00"), result.getStart());
         assertEquals(LocalDateTime.parse("2026-10-20T17:00"), result.getEnd());
@@ -68,6 +68,15 @@ class BookingBookTest {
         assertEquals(2, all.size());
         assertEquals(result, all.get(0));
         assertEquals(second, all.get(1));
+    }
+
+    @Test
+    void updateTargetsBookingThatIsNotFirst() {
+        Booking result = book.update(6, replacementWithId(6));
+
+        assertEquals(first, book.all().get(0));
+        assertEquals(result, book.all().get(1));
+        assertEquals("s3", book.all().get(1).getUserId());
     }
 
     @Test
@@ -116,6 +125,16 @@ class BookingBookTest {
 
         assertEquals(result, book.all().get(0));
         assertEquals(BookingStatus.ACTIVE, book.all().get(1).getStatus());
+    }
+
+    @Test
+    void cancelTargetsBookingThatIsNotFirst() {
+        Booking result = book.cancel(6);
+
+        assertEquals(first, book.all().get(0));
+        assertEquals(BookingStatus.ACTIVE, book.all().get(0).getStatus());
+        assertEquals(result, book.all().get(1));
+        assertEquals(BookingStatus.CANCELLED, book.all().get(1).getStatus());
     }
 
     @Test
